@@ -1,0 +1,212 @@
+dOWNLOAD NGNIX
+
+ON LINUX : wget https://nginx.org/keys/nginx_signing.key
+cd rtc/apt
+nano source.list --< links to find the updates for ubunto
+paste these lines into this files img 0
+ant previous installation is removed apt-get remove nginx-common
+apt-get update ->>to update the source list file
+apt-get install nginx -install ngnix ->run it by localhost:5000
+
+
+Containers no guest OS VS VM  Guest OS
+
+Packages are dependent on linux kernal..container contain with the some os file which are requiruired
+img 1,2,3
+
+DockeR Install
+
+sudo apt-get update
+install other packages img 4,5,6,7,8
+sudo apt-get update
+sudo apt_get install docker-ce
+sudo docker run hello-world
+sudo groupadd docker
+sudo usermod -aG docker dhwani
+
+Running application with Container
+
+docker image pull nginx:latest
+
+docker image
+docker conainer run -itd --name web-server-nginx -p 8080:80 nginx:latest
+docker ps -a
+
+
+Docker file get built, docker image get shipped Container are run
+
+Docker client we interact with docker we interact by CLI or API docker run/pull, client.containers.run/list
+API used to make container talk to talk
+Docker host -- actuall perform the tasks, it runs Docker deamon which runs the process, it builds docker image 
+Docker registry place to store the image
+interaction are bidieactional
+img 9
+
+
+Format of Docker file
+
+img 10,11
+
+Dockerfile img 12
+
+
+create the Docker file  with no extension and write 
+s2/D1
+ARG used for version control
+ARG CODE_VERSIOn=16.04
+FROm ubuntu:${CODE_VERSION} base os image 
+RUN apt-get upfate -y
+CMD ["bash"]
+
+docker build -t img_from . 
+
+s2/d2 -files resources  
+img 13
+build image 
+
+
+
+running container 
+docker run -itd --name cont_run-env(container name) img_run-env(image name)
+
+docker  ps -a
+
+img 14
+Run exec -it <container namr> process name
+
+img 15,16
+
+Note for the upcoming Apache demo
+Hello everyone!
+
+So, in the previous lecture, we containerized Nginx web-server and ubuntu as the runtime environment for it.  We exposed the Nginx container's port 80 and mapped it with Docker host's port 8080.
+
+Our container is still serving on the host port 8080.
+
+Now, in order to run our Apache container successfully, we need to free up port 8080 for course continuity purposes.
+
+Use the following command to do so:
+
+docker container stop cont_expose
+
+
+Note: This updated text has been added as a result of multiple student queries.
+
+Containarise the application
+
+SEE S2/d7
+ 
+
+docker image img 17,18
+
+Docker hub --create id 
+
+
+docker search <imagename> python:3.6
+docker search registry  
+docker search --filter "is-official=true" registry    ---sample of usinf filter while searching image
+img 19,20
+docker image -- show list od image
+docker image ubuntu  only ubintu image
+docker image pull image name
+docker image pull --all-tags image name --pull all images
+
+
+docker login
+
+pushing
+
+docker tag <image name/path>  <username/repo>:<name with it will be stored in library>
+docker image push <username/repo>:<name with it will be stored in library>
+
+Docker INspect
+
+docker image inspect <image name>
+we get information in txt, json, or in the special table (mannual table)
+
+docker image istory image nae
+layer wise information of image
+
+remove docker image rm <image name>
+
+docker rmi imagename if two mage name woth same id we use --force
+
+Create container -it --rm  --name cc-busybox-A busybox:latest
+
+docker container start cc-busybox-A
+
+docker container stop cc-busybox-A
+
+
+docker container Restart --time 5 cc-busybox-A
+
+
+docker container rename cc-busybox-A alpha 
+
+port mapping -p(small) if we awant to give in command
+
+-P(big) if we want to give inside the docker file
+
+
+remove container rm  --
+
+
+
+Storage
+
+Docker volume
+Docker bind
+tmpfs system
+
+
+Volume 
+docker volume create vol-busybox
+
+docker run -d --volume vol-ubuntu:/tmp ubuntu
+
+docker volume ls
+
+docker volume inspect vol-ubuntu
+docker volume rm <volume name
+
+mount container to container
+
+docker run -itd --name cont-ubuntu --volume vol-ubuntu /var/log ubuntu:latest
+
+in host machine stored in /var/lib/docker/volumes
+
+
+Network
+img 22  
+
+Container network model 
+img 23
+
+Docker native NetworkDriver
+
+Create bridge network
+docker network create --driver bridge <bridgename> my-bridge
+
+docker network create --driver bridge --subnet=192.168.0.0/16 --ip-range=192.168.5.0/24 <bridgename> my-bridge-1
+
+docker network ls (we can use fileter)
+
+connect network with bridge
+
+comtainer should run
+docker network connect my-bridge-1 my-ubuntu
+docker network disconnect my-bridge-1 my-ubuntu
+docker container inspect myubuntu
+
+rin with host
+docker container run -itd --network host --name cont_nginx nginx:latest
+
+
+Docker compose
+file with the all instructiom
+img 24
+
+Create compose file by 
+docker -compose up-d
+
+
